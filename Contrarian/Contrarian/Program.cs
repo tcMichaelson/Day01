@@ -6,51 +6,53 @@ using System.Threading.Tasks;
 
 namespace Contrarian {
     class Program {
+        static string[] HELPVERBS = {"am", "are", "is", "was", "were",
+            "has", "had","shall", "will","do", "does", "did","may", "must",
+            "might","can", "could", "would", "should","have"};
+
         static void Main(string[] args) {
 
             string response = "";
             string contrary = "";
+            string helpVerb = "";
             Console.Write("Enter a statement: ");
             response = Console.ReadLine();
-            //int helpingIndex = getHelpVerbIndex(response);
-            //string notWord = getNotWord(response);
-            //if (helpingIndex > -1) {
-            //    if (notIndex > -1 && notIndex > helpingIndex) {
-            //        contrary = response.Replace(response.Substring())
-            //    }
-            //}
-            if (response.Contains("n't")) {
-                contrary = response.Replace("n't", "");
-            } else if (response.Contains(" not")) {
-                contrary = response.Replace("not", "");
-            } else {
-                contrary = response.Insert(response.IndexOf("like"), "don't ");
+
+            var needNots = removeNots(ref contrary, response);
+            if (needNots == true) {
+                helpVerb = getHelpVerb(response);
+                if (helpVerb != "") {
+                    contrary = response.Insert(response.IndexOf(helpVerb) + helpVerb.Length, " not");
+                } else {
+                    contrary = "I'm sorry, your sentence needs a helping verb.";
+                }
             }
+
             Console.WriteLine(contrary);
             Console.ReadLine();
-
-
         }
-        //static int getHelpVerbIndex(string str) {
-        //    string[] helpVerbs = {"am", "are", "is", "was", "were", "be", "being", "been",
-        //        "have", "has", "had","shall", "will","do", "does", "did","may", "must",
-        //        "might","can", "could", "would", "should" };
-        //    foreach (var text in helpVerbs) {
-        //        if (str.Contains(text)) {
-        //            return str.IndexOf(text);
-        //        }
-        //    }
-        //    return -1;
-        //}
-        //static string getNotWord(string str) {
-        //    string word = "";
-        //    if (str.Contains("not")) {
-        //        word = "not";
-        //    } else if (str.Contains("n't")) {
-        //        word = "n't";
-        //    }
-        //    return word;
-        //}
 
+        static bool removeNots(ref string contrary, string response) {
+            var needNots = true;
+            if (response.Contains("n't")) {
+                contrary = response.Replace("n't", "");
+                needNots = false;
+            } else if (response.Contains("not")) {
+                contrary = response.Replace("not ", "");
+                needNots = false;
+            }
+            return needNots;
+        }
+
+        static string getHelpVerb(string str) {
+            foreach (var text in HELPVERBS) {
+                if (str.Contains(text)) {
+                    return text;
+                }
+            }
+            return "";
+        }
     }
+
+
 }
