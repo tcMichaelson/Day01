@@ -1,0 +1,23 @@
+RandomStringDataSource ****generates a random string****
+using DataSources;
+Properties:  
+Methods:
+   public static string generateRandomString();
+
+FileDataSource ****Loads a text file from the file system****
+using System.IO;
+using DataSources;
+Properties:
+  public string FileLocation {get; set;}
+Methods:
+  public bool LoadFile()
+  private string parseFileToText()
+
+InternetDataSource ****Loads a webpage****
+using System.Web.UI...?
+using DataSources;
+Properties:
+  public string WebURL {get; set}
+Methods:
+  public bool LoadPage()
+  private string parsePageToText()
