@@ -21,3 +21,7 @@ Properties:
 Methods:
   public bool LoadPage()
   private string parsePageToText()
+
+Best way to test counter class:
+  Insert the following into any of the three classes we defined above.
+  Debug.Assert(Counter.CountWords(someString) == expectedLength);
