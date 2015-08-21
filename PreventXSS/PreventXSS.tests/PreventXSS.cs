@@ -9,10 +9,9 @@ namespace PreventXSS.tests {
         public void TestSanitizeHTML() {
             //arrange
             var secure = new Security();
-            var list = new SafeTags();
 
             //act
-            var result = secure.SanitizeHTML("<b>hello</b><script>evil</script>", list.TagList);
+            var result = secure.SanitizeHTML("<b>hello</b><script>evil</script>");
 
             //assert
             Assert.AreEqual(@"<b>hello</b>&lt;script&gt;evil&lt;/script&gt;", result);
@@ -23,10 +22,9 @@ namespace PreventXSS.tests {
         public void TestSanitizeHTMLTagIsFirst() {
             //arrange
             var secure = new Security();
-            var list = new SafeTags();
 
             //act
-            var result = secure.SanitizeHTML("<script>evil</script><b>hello</b>", list.TagList);
+            var result = secure.SanitizeHTML("<script>evil</script><b>hello</b>");
 
             //assert
             Assert.AreEqual(@"&lt;script&gt;evil&lt;/script&gt;<b>hello</b>", result);
@@ -37,13 +35,12 @@ namespace PreventXSS.tests {
         public void TestSanitizeHTMLNoUnsafe() {
             //arrange
             var secure = new Security();
-            var list = new SafeTags();
 
             //act
-            var result = secure.SanitizeHTML("<b>hello</b><body>evil</body>", list.TagList);
+            var result = secure.SanitizeHTML("<b>hello</b><body>evil</body>");
 
             //assert
-            Assert.AreEqual(@"<b>hello</b>&lt;script&gt;evil&lt;/script&gt;", result);
+            Assert.AreEqual(@"<b>hello</b>&lt;body&gt;evil&lt;/body&gt;", result);
 
         }
     }

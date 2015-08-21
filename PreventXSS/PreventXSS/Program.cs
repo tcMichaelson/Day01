@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 using System.IO;
 
 namespace PreventXSS {
+
     public class Security {
-        public string SanitizeHTML(string stringToCheck, List<string> safeTags) {
+
+        public List<string> TagList { get; set; }
+
+        public string SanitizeHTML(string stringToCheck) {
             int foundCharAt = -1;               //index of "<"
             int lastCharAt;                     //index of ">"
             int tagLength = 0;                  //length of the potentially unsafe tag
@@ -25,7 +29,7 @@ namespace PreventXSS {
                     tagToCheck = stringToCheck.Substring(foundCharAt, tagLength);
 
                     //If unsafe tag is found remove ">" and "<" and insert "&lt;" and "&gt;"
-                    if (!(safeTags.Contains(tagToCheck))) {
+                    if (!(TagList.Contains(tagToCheck))) {
                         stringToCheck = stringToCheck.Remove(lastCharAt,1);
                         stringToCheck = stringToCheck.Insert(lastCharAt, "&gt;");
                         stringToCheck = stringToCheck.Remove(foundCharAt,1);
@@ -39,15 +43,10 @@ namespace PreventXSS {
             }
             return stringToCheck;
         }
-    }
 
-
-    public class SafeTags {
-
-        public List<string> TagList { get; set; }
-
-        public SafeTags() {
+        public Security() {
             TagList = new List<string>();
+
             if (File.Exists(@"C:\Projects\Week01\Day01-git\PreventXSS\safe_tags.txt")) {
                 foreach (string item in File.ReadLines(@"C:\Projects\Week01\Day01-git\PreventXSS\safe_tags.txt")) {
                     TagList.Add(item);
@@ -56,6 +55,10 @@ namespace PreventXSS {
 
             }
         }
+
+        public Security(List<string> list) {
+            TagList = new List<string>(list);
+        }
     }
 
 
@@ -63,8 +66,7 @@ namespace PreventXSS {
     class Program {
         static void Main(string[] args) {
             var secure = new Security();
-            var list = new SafeTags();
-            Console.WriteLine(secure.SanitizeHTML("<b>hello</b><script>evil</script>", list.TagList));
+            Console.WriteLine(secure.SanitizeHTML("<b>hello</b><body>evil</body>"));
             Console.ReadLine();
         }
     }
